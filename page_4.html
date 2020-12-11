@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap" rel="stylesheet">
+    <title>Johnny &amp; Rachel</title>
+    <style>
+        html, body {
+            margin: 0;
+            font-family: 'Noto Serif', serif;
+        }
+
+        #message {
+            animation: fadeIn ease 5s;
+            font-size: 5em;
+            text-align: center;
+            margin: 1em;
+        }
+
+        #form {
+            text-align: center;
+            margin-bottom: 3em;
+        }
+        #answer1, #answer2 {
+            padding: 0.5em;
+            font-size: 1.5em;
+            border-radius: 0.3em;
+            width: 3em;
+        }
+        #submit {
+            padding: 0.5em;
+            font-size: 1.5em;
+            border-radius: 0.3em;
+            border: 0;
+            background-color: #2e4388;
+            color: white;
+            transition: 0.2s all;
+        }
+        #submit:hover {
+            cursor: pointer;
+            filter: brightness(1.5);
+            box-shadow: 0 0 5px 0 #000;
+        }
+
+        @keyframes fadeIn {
+            0% {opacity:0;}
+            100% {opacity:1;}
+        }
+
+        code {
+            display: inline-block;
+            font-family: Courier;
+            background-color: #ddd;
+            padding: 0 0.2em;
+            border-radius: 0.2em;
+        }
+
+        .biggerText {
+            font-size: 2em;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="message">At times, we may wonder, "<code style="color: purple">for</code> how long things will continue like this?"</div>
+
+    <div id="form">
+        <input id="answer1" type="text"> <span class="biggerText">:</span> <input id="answer2" type="text">
+        <button id="submit">Submit</button>
+    </div>
+
+    <script>
+
+        document.getElementById("submit").addEventListener("click", function(e){
+            let button = this;
+            const INPUT_A = parseInt(document.getElementById("answer1").value);
+            const INPUT_B = parseInt(document.getElementById("answer2").value);
+
+            if(isNaN(INPUT_A) || isNaN(INPUT_B)){
+                return alert("Both inputs must be numbers.");
+            }
+            
+            //==============
+            // SELECT THE CORRECT TWO INPUTS,
+            // SUCH THAT AFTER THE 'FOR' LOOPS,
+            // THE SUM IS 1800
+            //==============
+            let sum = 0;
+            for(let i = 0; i < 20; i++){
+                for(let j = 0; j < 30; j++){
+                    sum += INPUT_A;
+                    sum += INPUT_B;
+                }
+            }
+
+            if(sum !== 1800) return alert("Sum didn't equal 1800.");
+            //==============
+
+            let answer = INPUT_A.toString() + INPUT_B.toString();
+
+            button.disabled = true;
+            button.textContent = "Loading...";
+            submitAnswer(answer).then((data) => {
+                button.textContent = "Submit";
+                button.disabled = false;
+                if(data.success){
+                    alert("Correct!");
+                    redirect(data.nextURL);
+                }else{
+                    alert("Incorrect answer.");
+                }
+            })
+
+            
+        })
+
+        function submitAnswer(answer){
+            return fetch("/api/{{endpoint}}", {
+                method: "post",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ answer })
+            })
+            .then(response => response.json())
+        }
+
+        function redirect(url){
+            location.href = "/"+url;
+        }
+        
+    </script>
+</body>
+</html>

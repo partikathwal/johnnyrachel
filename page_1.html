@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Covered+By+Your+Grace&family=Noto+Serif&display=swap" rel="stylesheet">
+    <title>Johnny &amp; Rachel</title>
+    <style>
+        html, body {
+            margin: 0;
+            font-family: 'Noto Serif', serif;
+            overflow: hidden;
+        }
+
+        #message {
+            animation: fadeIn ease 5s;
+            font-size: 5em;
+            text-align: center;
+            margin: 1em;
+        }
+
+        #form {
+            text-align: center;
+            margin-bottom: 3em;
+        }
+        #answer {
+            padding: 0.5em;
+            font-size: 1.5em;
+            border-radius: 0.3em;
+        }
+        #submit {
+            padding: 0.5em;
+            font-size: 1.5em;
+            border-radius: 0.3em;
+            border: 0;
+            background-color: #2e4388;
+            color: white;
+            transition: 0.2s all;
+        }
+        #submit:hover {
+            cursor: pointer;
+            filter: brightness(1.5);
+            box-shadow: 0 0 5px 0 #000;
+        }
+
+        @keyframes fadeIn {
+            0% {opacity:0;}
+            100% {opacity:1;}
+        }
+
+
+        #puzzlingText {
+            font-family: 'Covered By Your Grace', cursive;
+        }
+        #spotlight {
+            height: 200px;
+            width: 200px;
+            background-color: rgb(82, 82, 82);
+            border-radius: 100%;
+            position: absolute;
+            top: -200px;
+            left: -200px;
+        }
+        #hiddenText {
+            color: white;
+            z-index: 1;
+            position: absolute;
+            margin-top: 5em;
+            font-size: 2em;
+            width: 100%;
+            text-align: center;
+            display: inline-block;
+        }
+        #message {
+            position: relative;
+            z-index: 1;
+        }
+        #form {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="spotlight"></div>
+    
+    <div id="hiddenText">Proverbs1:6</div>
+    <div id="message">The times we are living in can be <span id="puzzlingText">puzzling</span></div>
+
+    <div id="form">
+        <input id="answer" type="text" placeholder="Input answer here...">
+        <button id="submit">Submit</button>
+    </div>
+
+    <script>
+
+        let spotlight = document.getElementById("spotlight");
+        document.addEventListener("mousemove", (e) => {
+            spotlight.style.left = (e.clientX - 100) + "px";
+            spotlight.style.top = (e.clientY - 100) + "px";
+        })
+
+        //========
+
+        document.getElementById("submit").addEventListener("click", function(e){
+            let button = this;
+            let answer = document.getElementById("answer").value;
+
+            button.disabled = true;
+            button.textContent = "Loading...";
+            submitAnswer(answer).then((data) => {
+                button.textContent = "Submit";
+                button.disabled = false;
+                if(data.success){
+                    alert("Correct!");
+                    redirect(data.nextURL);
+                }else{
+                    alert("Incorrect answer.");
+                }
+            })
+        })
+
+        function submitAnswer(answer){
+            return fetch("/api/{{endpoint}}", {
+                method: "post",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ answer })
+            })
+            .then(response => response.json())
+        }
+
+        function redirect(url){
+            location.href = "/"+url;
+        }
+        
+    </script>
+</body>
+</html>

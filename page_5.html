@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap" rel="stylesheet">
+    <title>Johnny &amp; Rachel</title>
+    <style>
+        html, body {
+            margin: 0;
+            font-family: 'Noto Serif', serif;
+        }
+
+        #message {
+            animation: fadeIn ease 5s;
+            font-size: 5em;
+            text-align: center;
+            margin: 1em;
+        }
+
+        #form {
+            text-align: center;
+            margin-bottom: 3em;
+        }
+        #answer {
+            padding: 0.5em;
+            font-size: 1.5em;
+            border-radius: 0.3em;
+        }
+        #submit {
+            padding: 0.5em;
+            font-size: 1.5em;
+            border-radius: 0.3em;
+            border: 0;
+            background-color: #2e4388;
+            color: white;
+            transition: 0.2s all;
+        }
+        #submit:hover {
+            cursor: pointer;
+            filter: brightness(1.5);
+            box-shadow: 0 0 5px 0 #000;
+        }
+
+        @keyframes fadeIn {
+            0% {opacity:0;}
+            100% {opacity:1;}
+        }
+
+        code {
+            display: inline-block;
+            font-family: Courier;
+            background-color: #ddd;
+            padding: 0 0.2em;
+            border-radius: 0.2em;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div id="message">But Jehovah's <code style="color: green">Promises</code> give us hope and joy, so we <code style="color: #07a">resolve()</code> to keep busy.</div>
+
+    <div id="form">
+        <input id="answer" type="text" placeholder="Input answer here...">
+    </div>
+
+    <script>
+
+
+        async function start(){
+            let path = await new World();
+            goTo(path);
+        }
+
+        class Heavens {
+            hasRighteousness = true;
+        }
+
+        class Earth {
+            hasRighteousness = true;
+        }
+
+        class World {
+            constructor(){
+                const heavens = new Heavens()
+                const earth = new Earth();
+
+                return new Promise((resolve, reject) => {
+                    
+                    let interval = setInterval(() => {
+
+                        //Hint: The answer is a scripture in the format 1Timothy2:3,4
+                        let answer = document.getElementById("answer").value;
+
+                        submitAnswer(answer).then((data) => {
+                            if(data.success){
+                                clearInterval(interval);
+                                alert("Correct!");
+                                resolve(data.nextURL);
+                            }else{
+                                console.log("Incorrect answer.");
+                            }
+                        })
+
+                    }, 1000)
+                    
+                })
+            }
+        }
+
+
+        //========
+        
+        start();
+
+        //======
+
+        function submitAnswer(answer){
+            return fetch("/api/{{endpoint}}", {
+                method: "post",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ answer })
+            })
+            .then(response => response.json())
+        }
+
+        function goTo(url){
+            location.href = "/"+url;
+        }
+        
+    </script>
+</body>
+</html>

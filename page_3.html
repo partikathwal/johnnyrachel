@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap" rel="stylesheet">
+    <title>Johnny &amp; Rachel</title>
+    <style>
+        html, body {
+            margin: 0;
+            font-family: 'Noto Serif', serif;
+        }
+
+        #message {
+            animation: fadeIn ease 5s;
+            font-size: 5em;
+            text-align: center;
+            margin: 1em;
+        }
+
+        #form {
+            text-align: center;
+            margin-bottom: 3em;
+        }
+        #answer {
+            padding: 0.5em;
+            font-size: 1.5em;
+            border-radius: 0.3em;
+        }
+        #submit {
+            padding: 0.5em;
+            font-size: 1.5em;
+            border-radius: 0.3em;
+            border: 0;
+            background-color: #2e4388;
+            color: white;
+            transition: 0.2s all;
+        }
+        #submit:hover {
+            cursor: pointer;
+            filter: brightness(1.5);
+            box-shadow: 0 0 5px 0 #000;
+        }
+
+        @keyframes fadeIn {
+            0% {opacity:0;}
+            100% {opacity:1;}
+        }
+
+        code {
+            display: inline-block;
+            font-family: Courier;
+            background-color: #ddd;
+            padding: 0 0.2em;
+            border-radius: 0.2em;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div id="message">But most of all, we have the <code style="color: #933">source</code> of all comfort by our side.</div>
+
+    <div id="form">
+        <input id="answer" type="text" placeholder="Input answer here...">
+        <button id="submit">Submit</button>
+    </div>
+
+    <script>
+
+        function getAnswer(){
+            let gobbledygook = "osjfhi2psnifnnsldidpa0fjC0wjHhopkk12r];['DioagsRn0euYT1bdgaa:/-+vV3Gtsvc,0db,d4skjey";
+            return gobbledygook.split("").filter((char, i) => { return i !== 0 && i % 6 === 0 }).join("");
+        }
+
+
+        //========
+
+        document.getElementById("submit").addEventListener("click", function(e){
+            let button = this;
+            let answer = document.getElementById("answer").value;
+
+            button.disabled = true;
+            button.textContent = "Loading...";
+            submitAnswer(answer).then((data) => {
+                button.textContent = "Submit";
+                button.disabled = false;
+                if(data.success){
+                    alert("Correct!");
+                    redirect(data.nextURL);
+                }else{
+                    alert("Incorrect answer.");
+                }
+            })
+        })
+
+        function submitAnswer(answer){
+            return fetch("/api/{{endpoint}}", {
+                method: "post",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ answer })
+            })
+            .then(response => response.json())
+        }
+
+        function redirect(url){
+            location.href = "/"+url;
+        }
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+Node server API
+How to deploy?
+	Lookup how to do it with Heroku
+
+5 pages
+(Please open this on a Desktop)
+1. The times we are living in can be puzzling
+	mouse has hover circle, hidden text Proverbs1:6
+2. But with challenges, good friends are always there for us to CONSOLE us.
+	Password: __
+	(console has password: prov17:17)
+3. But most of all we have the source of comfort to support us.
+	input submit
+	getPassword function can be called from console, outputs "2ndCorin1:3,4"
+4. At times, we may wonder, "for how long things will continue?"
+	input submit
+	for loop of math to get desired result, input is 1 : 2
+5. But Jehovah's Promises give us hope and joy, so we resolve() to keep busy.
+	input submit
+	Promise has loop to check for value, then resolve, awaited (coloss1:11)
+6. You both have proven to be true friends and great examples. And you do so as a Team.
+	input submit
+	code has comment //Copyright Microsoft
+	message them on teams: 4_12ec
+7. Thank you for all you do for Jehovah's people. Happy 5th anniversary! [The End]
+	1Thess 1:2,3
+	(theEnd=true)
+8. Mentos
+	
